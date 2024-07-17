@@ -66,3 +66,20 @@ class TestRectangle():
         button_calc = self.browser.find_element(By.ID, 'submit')
         button_calc.click()
         assert self.browser.find_element(By.ID, 'result').text == 'NaN'
+
+pytest --alluredir=allure-results
+
+- name: Allure Report action from marketplace
+      uses: simple-elf/allure-report-action@master
+      if: always()
+      with:
+        allure_results: allure-results
+        allure_history: allure-history
+        keep_reports: 20
+    - name: Deploy report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: allure-history
